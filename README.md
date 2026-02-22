@@ -1,303 +1,48 @@
-# Interactive-Hologram-
+# Development of a Four-Sided Pyramid Hologram Projection System Using Web-Based 3D Rendering
+# Abstract
 
-Abstract
+This project presents the design and implementation of a four-sided holographic projection system using a trapezoidal pyramid reflector and a real-time WebGL rendering engine. The objective was to create a floating three-dimensional helmet hologram using a single display source and reflective geometry. The system integrates mathematical modeling, 3D transformations, viewport segmentation, multi-camera rendering, and physical hardware fabrication. The final outcome demonstrates a synchronized holographic illusion achieved through precise geometric calibration and software control.
 
-This project presents the design and implementation of a four-sided holographic projection system using a trapezoidal pyramid reflector and a real-time WebGL rendering engine. The objective was to create a floating 3D helmet hologram using a single display source and reflective geometry. The system integrates mathematical modeling, 3D transformations, viewport segmentation, multi-camera rendering, and physical hardware fabrication. The final outcome demonstrates a synchronized holographic illusion achieved through precise geometric calibration and software control.
+# 1. Introduction
 
-1. Introduction
+Holographic pyramid displays simulate volumetric projections using reflective surfaces angled at precise degrees. Rather than projecting true volumetric light into space, the illusion is created by rendering multiple synchronized perspectives of a 3D model and reflecting them inward toward a central viewing axis. The goal of this project was to design and construct a physical hologram pyramid, develop a web-based real-time 3D rendering system, mathematically align digital projections with physical reflection geometry, and calibrate viewport alignment to produce a stable and convincing holographic illusion.
 
-Holographic pyramid displays simulate volumetric projections using reflective surfaces angled at precise degrees. Instead of true volumetric light projection, the illusion is created by rendering multiple synchronized perspectives of a 3D model and reflecting them inward toward a central viewing axis.
+# 2. Hardware Design
 
-The goal of this project was:
+The hardware component of the project consisted of constructing a four-sided transparent pyramid made from trapezoidal acrylic panels. Each face was cut into an identical trapezoid and assembled inward at approximately 45 degrees to form an inverted pyramid. The structure features a smaller top opening and a larger base, allowing light from a flat digital display to reflect inward and converge at the center. Precise measurements were critical, as any angular deviation would distort the reflected image. The physical build required careful cutting, alignment, and bonding to ensure symmetry and consistent reflection angles across all four faces.
 
-To design and construct a physical hologram pyramid
+# 3. Trapezoid Geometry and Mathematical Foundation
 
-To develop a web-based real-time 3D rendering system
+The geometric foundation of the pyramid was based on trapezoidal mathematics. Each face is defined by a top width, bottom width, and vertical height. The inward angle of the trapezoid determines the reflection path of the projected image. Using trigonometric relationships, the angle θ can be approximated by tan(θ) = ((b − a)/2) / h, where a and b represent the top and bottom widths, respectively, and h is the height. For optimal holographic symmetry, the angle was designed to be approximately 45 degrees. This ensured that reflections from all four panels converged toward a central axis, producing the floating holographic effect.
 
-To mathematically align digital projections with physical reflection geometry
+# 4. Software Architecture
 
-To calibrate viewport alignment for perfect holographic illusion
+The software system was developed using JavaScript and WebGL, structured primarily within the main rendering file. The architecture consisted of a 3D scene containing a model group representing the helmet hologram, four independent cameras positioned orthogonally around the model, and a rendering loop that updated transformations and projections in real time. The system was designed to maintain consistent coordinate alignment between the digital 3D space and the physical reflective structure, requiring careful management of projection matrices and aspect ratios.
 
-2. Hardware Design
-   
-2.1 The Pyramid Structure
+# 5. Multi-Camera Rendering System
 
-The hologram pyramid consists of four transparent trapezoidal panels arranged into an inverted pyramid.
+To generate the holographic illusion, four synchronized cameras were implemented: front, back, left, and right. Each camera observed the same 3D model from a 90-degree rotated perspective around the origin. The cameras were positioned symmetrically at equal distances from the center to preserve geometric consistency. During each frame, the system rendered the scene four times, once per camera, ensuring that each perspective corresponded to one trapezoidal face of the pyramid. This multi-camera system is fundamental to the illusion, as each reflection must represent a correct viewpoint of the same object.
 
-Geometry Properties:
+# 6. Viewport Segmentation and Screen-Space Mapping
 
-4 identical trapezoidal faces
+The digital display was divided into four viewport regions corresponding to the four reflective faces of the pyramid. Using the functions renderer.setViewport() and renderer.setScissor(), each camera’s output was confined to a specific quadrant of the screen. The Y-coordinate system of the canvas required careful handling, as zero represents the bottom of the canvas and increasing values move upward. Adjustments such as negative viewport offsets were used to shift rendered projections downward when necessary. These adjustments allowed precise alignment between the digital projection and the physical trapezoid placement without altering the 3D model’s spatial position.
 
-Angled inward at approximately 45°
+# 7. 3D Model Transformation and Calibration
 
-Smaller top opening
+The holographic helmet was managed as a model group within the scene. Its transformation properties were adjusted to achieve proper alignment within the pyramid. Vertical scaling was applied to compensate for reflective distortion, while position adjustments along the Y-axis centered the hologram vertically. Depth adjustments along the Z-axis shifted the model relative to the cameras, affecting how the reflections converged. Because all cameras were symmetrically positioned, moving the model in the Z direction altered all projections uniformly, maintaining consistency across the four faces.
 
-Larger base
+# 8. Rendering Pipeline and Frame Execution
 
-Transparent acrylic material
+The rendering process operated within a continuous animation loop. During each frame, the system updated camera aspect ratios, refreshed projection matrices, set viewport and scissor regions, and rendered the scene sequentially from each camera’s perspective. This four-pass rendering cycle ensured that each trapezoidal face displayed the correct perspective simultaneously. The synchronization of these renders was essential for maintaining the illusion of a unified floating object rather than four disconnected reflections.
 
-This shape reflects light from a flat screen into the center, forming a floating image.
+# 9. Calibration and Iterative Refinement
 
-2.2 Trapezoid Mathematics
+Achieving accurate alignment required iterative calibration. The process began with precise measurement of the trapezoidal panels and verification of angular symmetry. Camera distances were then adjusted to achieve proportional scaling of the model. Subsequent fine-tuning involved modifying the model’s vertical and depth offsets to align reflections at the center of the pyramid. Finally, viewport offsets were introduced to compensate for minor physical assembly tolerances. This iterative debugging process combined mathematical reasoning with empirical visual testing to achieve accurate convergence.
 
-Each face of the pyramid is a trapezoid defined by:
+# 10. Engineering Challenges
 
-Top width (a)
+Several engineering challenges arose during development. Aligning digital coordinate space with physical reflective geometry required careful spatial reasoning. Perspective distortion had to be compensated through scaling adjustments. Viewport misalignment could result in clipping artifacts if scissor regions were not synchronized correctly. Additionally, maintaining symmetry across all four camera perspectives required strict adherence to equal distances and orthogonal positioning. Each challenge demanded systematic testing and analytical problem-solving.
 
-Bottom width (b)
+# 11. Final Outcome and Significance
 
-Height (h)
-
-The side angle θ determines reflection alignment:
-
-tan(0) = (b-a)/2 / h
-
-For optimal holographic reflection:
-
-tan(0) = 45 degree
-
-This ensures symmetric reflection from all four faces.
-
-Precise measurements were required so that:
-
-The digital projection area matched the trapezoid footprint
-
-The center of reflection aligned with the 3D model origin
-
-3. Software Architecture
-
-The software system was built using:
-
-JavaScript
-
-WebGL
-
-Multi-camera rendering
-
-Viewport segmentation
-
-Real-time 3D transformations
-
-The hologram is rendered inside main.js.
-
-4. Multi-Camera Rendering System
-
-The illusion requires four synchronized perspectives:
-
-Front camera
-
-Back camera
-
-Left camera
-
-Right camera
-
-Each camera observes the same 3D model but from a 90° rotated position.
-
-Example conceptual setup:
-
-Front:  (0, 0, +d)
-Back:   (0, 0, -d)
-Left:   (-d, 0, 0)
-Right:  (+d, 0, 0)
-
-Where d is camera distance from origin.
-
-Each camera renders into a quadrant of the screen.
-
-5. Viewport Segmentation Mathematics
-
-The screen is divided into four regions:
-
-Top
-Bottom
-Left
-Right
-
-Using:
-
-renderer.setViewport(x, y, width, height);
-renderer.setScissor(x, y, width, height);
-
-Key insight:
-
-0 = bottom of canvas
-
-Increasing Y moves rendering upward
-
-Negative Y moves rendering downward
-
-Example calibration:
-
-renderer.setViewport(w / 4, -150, vw, vh);
-
-This shifts the bottom projection downward.
-
-This was used to align digital output with the physical trapezoid reflection height.
-
-Viewport offset ≠ moving 3D object
-Viewport offset = screen-space correction
-
-6. 3D Model Transformation
-
-The helmet hologram is stored in modelGroup.
-
-Three key transformations control alignment:
-
-modelGroup.scale.y = HOLOGRAM_Y_STRETCH;
-modelGroup.position.y = HOLOGRAM_Y_OFFSET;
-modelGroup.position.z = -0.3;
-
-Meaning:
-
-scale.y → vertical distortion compensation
-
-position.y → vertical centering
-
-position.z → depth shift relative to cameras
-
-Because the cameras remain symmetric, moving the model along Z affects all projections consistently.
-
-7. Rendering Process
-
-Each frame:
-
-Update camera aspect ratio
-
-Set viewport region
-
-Apply scissor test
-
-Render scene with specific camera
-
-Repeat 4 times
-
-Pseudo-structure:
-
-render(front camera)
-render(back camera)
-render(left camera)
-render(right camera)
-
-This creates the cross-shaped projection needed for pyramid reflection.
-
-8. Calibration Phase
-
-Calibration involved:
-
-Step 1 — Hardware Measurement
-
-Measure trapezoid dimensions precisely.
-
-Step 2 — Camera Distance Tuning
-
-Adjust camera distance for correct model scaling.
-
-Step 3 — Model Centering
-
-Adjust:
-
-modelGroup.position.y
-modelGroup.position.z
-
-Step 4 — Viewport Alignment
-
-Use:
-
-renderer.setViewport()
-renderer.setScissor()
-
-To compensate for physical assembly tolerances.
-
-Step 5 — Symmetry Testing
-
-Ensure:
-
-Top matches bottom
-
-Left matches right
-
-Reflection convergence aligns at center
-
-Fine adjustments such as:
-
-BOTTOM_OFFSET = -150;
-TOP_OFFSET = +150;
-
-Allowed precise correction.
-
-9. Engineering Challenges
-
-Aligning digital coordinate space with physical reflection space
-
-Compensating for perspective distortion
-
-Matching viewport regions to trapezoid shape
-
-Maintaining symmetry
-
-Avoiding scissor clipping artifacts
-
-Managing camera projection matrices
-
-Each issue required mathematical reasoning and iterative testing.
-
-10. Final Outcome
-
-The completed system successfully:
-
-Projects a floating 3D helmet
-
-Maintains symmetric reflections
-
-Preserves correct proportions
-
-Operates in real time via WebGL
-
-Aligns precisely with physical pyramid geometry
-
-The project demonstrates:
-
-Applied trigonometry
-
-Real-time graphics programming
-
-Coordinate system transformation
-
-Physical-digital integration
-
-Systems engineering principles
-
-11. Project Significance
-
-This project bridges:
-
-Mathematics
-
-Computer graphics
-
-Hardware fabrication
-
-Optical illusion physics
-
-Interactive rendering systems
-
-It demonstrates how geometric theory, when combined with programmable rendering pipelines, can produce compelling volumetric illusions using minimal hardware.
-
-Conclusion
-
-The hologram pyramid system represents a complete integration of:
-
-Mathematical modeling
-
-3D transformation control
-
-Multi-camera rendering architecture
-
-Viewport manipulation
-
-Physical reflection geometry
-
-Through iterative debugging, mathematical calibration, and structured engineering methodology, the final system achieves a stable and visually convincing holographic projection.
-
-This project illustrates the power of combining theoretical mathematics with real-time graphics programming to transform abstract coordinate systems into tangible visual experiences.
+The completed system successfully projects a stable, symmetrical, real-time floating 3D helmet hologram using only a flat display and reflective geometry. The project demonstrates the integration of applied trigonometry, real-time computer graphics, coordinate transformation theory, hardware fabrication, and optical illusion principles. By combining mathematical modeling with programmable rendering pipelines, the system transforms abstract coordinate calculations into a tangible volumetric illusion. This project highlights the interdisciplinary nature of engineering, bridging mathematics, physics, and software development to create a functional and visually compelling holographic display.
